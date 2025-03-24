@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rental Listings - EaseStay</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Available Rentals</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="logout.html">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section id="rentals">
+        <h2>Loading Listings...</h2>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 EaseStay. All Rights Reserved.</p>
+    </footer>
+
+    <script type="module">
+        import { db } from "./firebase-config.js";
+        import { collection, getDocs } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js";
+
+        async function loadListings() {
+            let rentalsSection = document.getElementById("rentals");
+            rentalsSection.innerHTML = "";
+
+            let querySnapshot = await getDocs(collection(db, "rentals"));
+            querySnapshot.forEach(doc => {
+                let rental = doc.data();
+                rentalsSection.innerHTML += `<div>
+                    <h3>${rental.title}</h3>
+                    <img src="${rental.image}" width="300">
+                    <p>${rental.address} - ₹${rental.price}</p>
+                </div>`;
+            });
+        }
+
+        loadListings();
+    </script>
+</body>
+</html>
