@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - EaseStay</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Login</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="signup.html">Sign Up</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section>
+        <h2>Login to Your Account</h2>
+        <form id="loginForm">
+            <label for="email">Email:</label>
+            <input type="email" id="email" required>
+            <br>
+
+            <label for="password">Password:</label>
+            <input type="password" id="password" required>
+            <br>
+
+            <button type="submit">Login</button>
+        </form>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 EaseStay. All Rights Reserved.</p>
+    </footer>
+
+    <script type="module">
+        import { auth, signInWithEmailAndPassword } from "./firebase-config.js";
+
+        document.getElementById("loginForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            let email = document.getElementById("email").value;
+            let password = document.getElementById("password").value;
+
+            signInWithEmailAndPassword(auth, email, password)
+                .then((userCredential) => {
+                    const user = userCredential.user;
+
+                    // Check if the user is admin
+                    if (email === "admin@easestay.com" && password === "Admin123") {
+                        alert("Admin login successful!");
+                        window.location.href = "admin.html"; // Redirect to Admin Panel
+                    } else {
+                        alert("User login successful!");
+                        window.location.href = "listings.html"; // Redirect to Listings Page
+                    }
+                })
+                .catch((error) => {
+                    alert(error.message);
+                });
+        });
+    </script>
+</body>
+</html>
